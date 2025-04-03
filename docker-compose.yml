@@ -1,0 +1,12 @@
+services:
+  twapi-app:
+    build: .
+    container_name: twapi-app
+    ports:
+      - "8080:8080"  # Map the container port 8080 to host port 8080
+    networks:
+      - twapi-network
+
+networks:
+  twapi-network:
+    driver: bridge
