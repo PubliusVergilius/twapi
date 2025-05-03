@@ -13,12 +13,13 @@ Core Features:
 
 Modular Architecture
 
-twapi
+`twapi
 ├── application/       # REST Controllers, Request/Response mapping
 ├── domain/            # Domain models and interfaces
 ├── infrastructure/    # Persistence, file system, third-party integrations
 ├── support/           # Shared utils, error handling, DTO mapping, etc.
 └── configuration/     # Modulith-specific config
+`
 
 ## TODO
 ### Add a redis database in which commentaries to posts are temporarily stored. A second service or module will check if there is any explict word. The user id will be the store in a list. You can have a dictionnary of explicit words or use AI to detect any harmfull sentence.
