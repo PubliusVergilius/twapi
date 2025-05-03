@@ -1,11 +1,4 @@
-Twapi is a Twitter like API.
-With Twapi, our primary responsibility is to allow people to post new messages and
-view messages posted by other people.
-After that, we’ll
-look at two additional actions this API might need: listing lots of messages and export-
-ing all messages to a different storage system.
-It is a RESTfull API.
-Uses spring boot, spring modulith, TDD, Hateos, MongoDB
+Twapi is a Twitter like API. With Twapi, our primary responsibility is to allow people to post new messages and view messages posted by other people. After that, we’ll look at two additional actions this API might need: listing lots of messages and exporting all messages to a different storage system. It is a RESTfull API. Uses spring boot, spring modulith, TDD, Hateoas, Postgres.
 
 ✅ Domain Overview
 Core Features: 
