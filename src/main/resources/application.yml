@@ -1,0 +1,30 @@
+server:
+  port: 9090
+
+spring:
+  main:
+    web-application-type: reactive
+  application:
+    name: Twapi
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+
+  h2:
+    console:
+      enabled: true
+
+  cloud:
+    gateway:
+        mvc:
+          http-client:
+            type: autodetect
+            connect-timeout: 60s
+            read-timeout: 60s
