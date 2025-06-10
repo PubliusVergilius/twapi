@@ -2,6 +2,11 @@ server:
   port: 9090
   max-http-header-size: 16384
 spring:
+  http:
+    encoding:
+      enable: true
+      force: true
+      charset: "UTF-16"
   docker:
     compose:
       enabled: false

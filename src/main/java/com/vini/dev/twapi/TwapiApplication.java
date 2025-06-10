@@ -7,23 +7,19 @@ import org.springframework.context.annotation.Configuration;
 
 @SpringBootApplication
 public class TwapiApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(TwapiApplication.class, args);
 	}
-
-
-
 }
 
 @Configuration
 class AppConfig {
 
 	@Bean
-	Passaro Test () {
+	Bird Test () {
 		System.out.println("************ Sou um Bean *************");
-		return new Passaro();
+		return new Bird();
 	}
 }
 
-class Passaro  {}
+class Bird  {}
