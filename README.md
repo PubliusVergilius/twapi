@@ -9,7 +9,7 @@ Core Features:
 
 3 - List many messages (pagination)
 
-4 - Export all messages (e.g., to a file or external system)
+4 - Export all messages (e.g., to a file or external system) through a Job (spring batch)
 
 Modular Architecture with Spring Modulith
 Built-in gateway with Spring Cloud Gateway

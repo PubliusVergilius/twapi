@@ -1,9 +1,10 @@
 server:
   port: 9090
-
+  max-http-header-size: 16384
 spring:
-  main:
-    web-application-type: reactive
+  docker:
+    compose:
+      enabled: false
   application:
     name: Twapi
   datasource:
@@ -20,11 +21,3 @@ spring:
   h2:
     console:
       enabled: true
-
-  cloud:
-    gateway:
-        mvc:
-          http-client:
-            type: autodetect
-            connect-timeout: 60s
-            read-timeout: 60s
