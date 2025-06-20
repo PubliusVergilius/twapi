@@ -18,6 +18,8 @@ Concurrent by default with Webflux
 ![image](https://github.com/user-attachments/assets/3430ecc0-625e-4f23-8647-96a9c865456a)
 
 ## TODO
+- make user have unique username
+- make user create and retrieve his own posts
 ### Add Modulith package
 ### Add Spring Gateway
 ### Add TDD
