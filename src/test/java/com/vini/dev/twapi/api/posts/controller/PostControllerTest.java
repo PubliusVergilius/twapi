@@ -6,8 +6,6 @@ import com.vini.dev.twapi.api.posts.controllers.PostController;
 import com.vini.dev.twapi.api.posts.domain.Post;
 import com.vini.dev.twapi.api.posts.dto.PostCreateDTO;
 import com.vini.dev.twapi.api.posts.dto.PostDTO;
-import com.vini.dev.twapi.api.posts.dto.PostResponseDTO;
-import com.vini.dev.twapi.api.posts.mapper.PostMapper;
 import com.vini.dev.twapi.api.posts.service.PostService;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Assertions;
@@ -27,6 +25,7 @@ import org.springframework.test.web.servlet.ResultMatcher;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -66,7 +65,7 @@ public class PostControllerTest {
     private ObjectMapper postMapper;
 
     @Test
-    void it_should_return_created_response() throws  Exception {
+    void create_post_test_cases() throws  Exception {
 
         class Template {
             final String name;
@@ -108,7 +107,10 @@ public class PostControllerTest {
                         HttpStatus.BAD_REQUEST.value(),
                         result -> {
                             try {
-                                result.andExpect(jsonPath("$.error").value("Invalid data!"));
+                                result
+                                        .andExpect(jsonPath("$.message").value("Validation failed"))
+                                        .andExpect(jsonPath("$.errors").hasJsonPath());
+
                             } catch (Exception e) {
                                 throw new RuntimeException(e);
                             }
@@ -120,12 +122,12 @@ public class PostControllerTest {
 
             // Mock http response
             when(postService.registerPost(test.input))
-                    .thenReturn(new PostDTO("teste", test.input.userId(), test.input.body()));
+                    .thenReturn(new PostDTO("teste", test.input.authorId(), test.input.body()));
 
             // Test request
             String json = postMapper.writeValueAsString(test.input);
             MvcResult result = mock.perform(post(uri)
-                            .cookie(new Cookie("userId", test.input.userId()))
+                            .cookie(new Cookie("userId", test.input.authorId()))
                             .content(json)
                             .with(new RequestProcessor().jsonDefaults()))
                     .andExpect(status().is(test.expectedStatus))
@@ -144,7 +146,7 @@ public class PostControllerTest {
         var want = new PostDTO("1", "1", "teste 1");
         String json = postMapper.writeValueAsString(want);
 
-        when(postService.retrievePost("1")).thenReturn(want);
+        when(postService.retrievePost("1")).thenReturn(Optional.of(want));
         MvcResult got = mock.perform(get(uri + "1")
                         .cookie(new Cookie("userId", "1")))
                 .andExpect(status().isFound())

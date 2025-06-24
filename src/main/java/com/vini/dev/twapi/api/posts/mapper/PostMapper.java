@@ -6,7 +6,7 @@ import com.vini.dev.twapi.api.posts.dto.PostResponseDTO;
 
 public class PostMapper {
     public static Post toEntity (PostCreateDTO dto) {
-        return new Post(null, dto.userId(), dto.body());
+        return new Post(null, dto.authorId(), dto.body());
     }
 
     public static PostResponseDTO toResponse (Post post) {

@@ -68,7 +68,7 @@ public class PostServiceTest {
     @Test
     void should_retrieve_post_by_id () {
         var got = postService.retrievePost("1");
-        // Assertions.assertTrue(got., "post should not be null");
-        Assertions.assertEquals(new PostDTO("1", "1", "teste 1"), got);
+        Assertions.assertTrue(got.isPresent(), "post should not be null");
+        Assertions.assertEquals(new PostDTO("1", "1", "teste 1"), got.get());
     }
 }

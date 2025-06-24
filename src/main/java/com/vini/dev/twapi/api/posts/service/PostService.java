@@ -8,7 +8,7 @@ import com.vini.dev.twapi.api.posts.repository.PostRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-;
+import java.util.Optional;
 
 @Service
 // @AllArgsConstructor
@@ -28,9 +28,12 @@ public class PostService {
     }
 
     @Transactional
-    public PostDTO retrievePost (String postId) {
-        Post post = postRepository.findById(postId).orElse(new Post());
-
-        return new PostDTO(post.getId(), post.getUserId(), post.getBody());
+    public Optional<PostDTO> retrievePost (String postId) {
+        Optional<Post> postOpt = postRepository.findById(postId);
+        if (postOpt.isPresent()) {
+            var post = postOpt.get();
+            return Optional.of(new PostDTO(post.getId(), post.getUserId(), post.getBody()));
+        }
+        return null;
     }
 }
