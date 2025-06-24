@@ -3,6 +3,8 @@ server:
   max-http-header-size: 16384
 spring:
   http:
+    profiles:
+      active: "test"
     encoding:
       charset: "UTF-8"
       enable: true

@@ -1,21 +1,16 @@
 package com.vini.dev.twapi.api.posts.service;
 
-import com.vini.dev.twapi.api.posts.config.StubRepositoryConfig;
 import com.vini.dev.twapi.api.posts.domain.Post;
-import com.vini.dev.twapi.api.posts.dto.PostRequest;
-import com.vini.dev.twapi.api.posts.dto.PostResponse;
-import com.vini.dev.twapi.api.posts.repository.StubPostRepository;
+import com.vini.dev.twapi.api.posts.dto.PostCreateDTO;
+import com.vini.dev.twapi.api.posts.dto.PostDTO;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 /// Using h2 database instead of the stub give a more realistic scenario
@@ -59,7 +54,7 @@ public class PostServiceTest {
         test_table.forEach(test -> {
            try {
                Post want = new Post(test.want.getId(), test.want.getUserId(), test.want.getBody());
-               PostResponse got = postService.registerPost(new PostRequest(want.getUserId(), want.getBody() ));
+               var got = postService.registerPost(new PostCreateDTO(want.getUserId(), want.getBody() ));
 
                Assertions.assertNotNull(got, "should never be null");
                Assertions.assertEquals(want.getBody(), got.body(), "wrong response body on registering new post");
@@ -72,8 +67,8 @@ public class PostServiceTest {
     }
     @Test
     void should_retrieve_post_by_id () {
-        PostResponse got = postService.retrievePost("1");
+        var got = postService.retrievePost("1");
         // Assertions.assertTrue(got., "post should not be null");
-        Assertions.assertEquals(new PostResponse("1", "1", "teste 1"), got);
+        Assertions.assertEquals(new PostDTO("1", "1", "teste 1"), got);
     }
 }
