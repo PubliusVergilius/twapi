@@ -18,7 +18,7 @@ jobs:
           git config --global user.name "vinteesetedemaiodedoismil"
           git config --global user.email "vinteesetedemaiodedoismil@gmail.com"
           # git remote add origin git@gitlab.com:vinteesetedemaiodedoismil/twapi.git
-          git remote add gitlab https://vinteesetedemaiodedoismil:${{ secrets.GITLAB_TOKEN }}@gitlab/vinteestedemaiodedoismil/twapi.git
+          git remote add gitlab https://vinteesetedemaiodedoismil:${{ secrets.GITLAB_TOKEN }}@gitlab/vinteesetedemaiodedoismil/twapi.git
           git push --mirror gitlab
         # env:
           # GIT_CREDENTIALS: ${{ secrets.GITLAB_TOKEN }}
