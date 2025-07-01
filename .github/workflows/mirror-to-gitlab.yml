@@ -1,1 +1,21 @@
 
+name: Mirror to GitLab
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone GitHub repo
+        uses: actions/checkout@v3
+
+      - name: Push to GitLab
+        run: |
+          git remote add gitlab https://gitlab.com/vinteesetedemaiodedoismil/twapi.git
+          git push --mirror gitlab
+        env:
+          GIT_CREDENTIALS: ${{ secrets.GITLAB_TOKEN }}
