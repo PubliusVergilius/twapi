@@ -15,7 +15,7 @@ jobs:
 
       - name: Push to GitLab
         run: |
-          git remote add gitlab https://gitlab.com/vinteesetedemaiodedoismil/twapi.git
+          git remote add https://gitlab.com/vinteesetedemaiodedoismil/twapi.git
           git push --mirror gitlab
         env:
           GIT_CREDENTIALS: ${{ secrets.GITLAB_TOKEN }}
