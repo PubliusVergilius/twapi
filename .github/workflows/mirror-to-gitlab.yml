@@ -1,31 +1,31 @@
 # .github/workflows/mirror-to-gitlab.yml
 
-- name: Push branches to GitLab
-  with:
-    fetch-depth: 0  #
-  on:
-    push:
-      branches:
-        - develop
+name: Push branches to GitLab
+with:
+  fetch-depth: 0  #
+on:
+  push:
+    branches:
+      - develop
 
-  env:
-    GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
-  jobs:
-    mirror:
-      runs-on: ubuntu-latest
-      environment: GitlabToken
-      steps:
-        - name: Clone GitHub repo
-          uses: actions/checkout@v3
+env:
+  GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    environment: GitlabToken
+    steps:
+      - name: Clone GitHub repo
+        uses: actions/checkout@v3
 
-        - name: Push to GitLab
-          run: |
-            git config --global user.name "vinteesetedemaiodedoismil"
-            git config --global user.email "vinteesetedemaiodedoismil@gmail.com"
-            # git remote add origin git@gitlab.com:vinteesetedemaiodedoismil/twapi.git
-            git remote add gitlab https://vinteesetedemaiodedoismil:${{ secrets.GITLAB_TOKEN }}@gitlab.com/vinteesetedemaiodedoismil/twapi.git
-            git push --mirror gitlab
-        - name: Check secret presence
-          run: |
-            echo "GitLab token set: ${GITLAB_TOKEN+x}"
+      - name: Push to GitLab
+        run: |
+          git config --global user.name "vinteesetedemaiodedoismil"
+          git config --global user.email "vinteesetedemaiodedoismil@gmail.com"
+          # git remote add origin git@gitlab.com:vinteesetedemaiodedoismil/twapi.git
+          git remote add gitlab https://vinteesetedemaiodedoismil:${{ secrets.GITLAB_TOKEN }}@gitlab.com/vinteesetedemaiodedoismil/twapi.git
+          git push --mirror gitlab
+      - name: Check secret presence
+        run: |
+          echo "GitLab token set: ${GITLAB_TOKEN+x}"
 
