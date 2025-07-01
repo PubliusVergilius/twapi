@@ -9,6 +9,7 @@ on:
 jobs:
   mirror:
     runs-on: ubuntu-latest
+    environment: GitlabToken
     steps:
       - name: Clone GitHub repo
         uses: actions/checkout@v3
