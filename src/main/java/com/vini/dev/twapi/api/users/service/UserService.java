@@ -13,7 +13,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public User registerUser (User user) throws Exception {
-        return userRepository.save(user);
+    public User registerUser (final User user) throws Exception {
+        return this.userRepository.save(user);
     }
 }

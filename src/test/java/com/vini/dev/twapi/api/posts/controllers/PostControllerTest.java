@@ -1,12 +1,12 @@
-package com.vini.dev.twapi.api.posts.controller;
+package com.vini.dev.twapi.api.posts.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vini.dev.twapi.api.lib.RequestProcessor;
-import com.vini.dev.twapi.api.posts.controllers.PostController;
 import com.vini.dev.twapi.api.posts.domain.Post;
 import com.vini.dev.twapi.api.posts.dto.PostCreateDTO;
 import com.vini.dev.twapi.api.posts.dto.PostDTO;
-import com.vini.dev.twapi.api.posts.service.PostService;
+import com.vini.dev.twapi.api.posts.services.PostService;
+import com.vini.dev.twapi.api.users.domain.User;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +20,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -28,7 +27,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -53,9 +51,9 @@ public class PostControllerTest {
 
     @BeforeEach
     void setUp () {
-        posts = List.of(
-                new Post("101", "1", "teste 1"),
-                new Post("102", "1", "teste 2")
+        this.posts = List.of(
+                new Post("101", new User("developer"), "teste 1"),
+                new Post("102", new User("developer"), "teste 2")
         );
     }
 
@@ -73,7 +71,7 @@ public class PostControllerTest {
             final int expectedStatus;
             final Consumer<ResultActions> assertResponse;
 
-            public Template(String name, PostCreateDTO input, int expectedStatus, Consumer<ResultActions> assertResponse) {
+            public Template(final String name, final PostCreateDTO input, final int expectedStatus, final Consumer<ResultActions> assertResponse) {
                 this.name = name;
                 this.input = input;
                 this.expectedStatus = expectedStatus;
@@ -81,7 +79,7 @@ public class PostControllerTest {
             }
         }
 
-        List<Template> table_cases = List.of(
+        final List<Template> table_cases = List.of(
                 new Template(
                         "Should get post 1 with 201",
                         new PostCreateDTO("1" ,  "teste 1"),
@@ -96,7 +94,7 @@ public class PostControllerTest {
                             try {
                                 result.andExpect(jsonPath("$.id").isNotEmpty())
                                         .andExpect(jsonPath("$.body").value("teste 2"));
-                            } catch (Exception e) {
+                            } catch (final Exception e) {
                                 throw new RuntimeException(e);
                             }
                         }
@@ -111,22 +109,22 @@ public class PostControllerTest {
                                         .andExpect(jsonPath("$.message").value("Validation failed"))
                                         .andExpect(jsonPath("$.errors").hasJsonPath());
 
-                            } catch (Exception e) {
+                            } catch (final Exception e) {
                                 throw new RuntimeException(e);
                             }
                         }
                 )
         );
 
-        for (Template test : table_cases) {
+        for (final Template test : table_cases) {
 
             // Mock http response
-            when(postService.registerPost(test.input))
+            when(this.postService.registerPost(test.input))
                     .thenReturn(new PostDTO("teste", test.input.authorId(), test.input.body()));
 
             // Test request
-            String json = postMapper.writeValueAsString(test.input);
-            MvcResult result = mock.perform(post(uri)
+            final String json = this.postMapper.writeValueAsString(test.input);
+            final MvcResult result = this.mock.perform(post(this.uri)
                             .cookie(new Cookie("userId", test.input.authorId()))
                             .content(json)
                             .with(new RequestProcessor().jsonDefaults()))
@@ -134,30 +132,30 @@ public class PostControllerTest {
                     .andReturn();
 
             // Test content
-            assertResponseContent(result, test.input.body(), test.name);
-            test.assertResponse.accept(mock.perform(post(uri)
+            this.assertResponseContent(result, test.input.body(), test.name);
+            test.assertResponse.accept(this.mock.perform(post(this.uri)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(postMapper.writeValueAsString(test.input))));
+                    .content(this.postMapper.writeValueAsString(test.input))));
         }
     }
 
     @Test
     void should_get_response_with_found_status() throws Exception {
-        var want = new PostDTO("1", "1", "teste 1");
-        String json = postMapper.writeValueAsString(want);
+        final var want = new PostDTO("1", "1", "teste 1");
+        final String json = this.postMapper.writeValueAsString(want);
 
-        when(postService.retrievePost("1")).thenReturn(Optional.of(want));
-        MvcResult got = mock.perform(get(uri + "1")
+        when(this.postService.retrievePost("1")).thenReturn(Optional.of(want));
+        final MvcResult got = this.mock.perform(get(this.uri + "1")
                         .cookie(new Cookie("userId", "1")))
                 .andExpect(status().isFound())
                 .andReturn();
 
-        assertResponseContent(got, json, "should get post 1 with status ok");
+        this.assertResponseContent(got, json, "should get post 1 with status ok");
     }
 
-    void assertResponseContent (MvcResult got, String want, String message) {
-        String responseContent = new String(got.getResponse().getContentAsByteArray(), StandardCharsets.UTF_8);
-        Assertions.assertTrue(responseContent.contains(new String(want.getBytes(StandardCharsets.UTF_8))), message);
+    void assertResponseContent (final MvcResult got, final String want, final String message) {
+        final String responseContent = new String(got.getResponse().getContentAsByteArray(), StandardCharsets.UTF_8);
+        Assertions.assertTrue(responseContent.contains(new String(want.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8)), message);
     }
 }
 

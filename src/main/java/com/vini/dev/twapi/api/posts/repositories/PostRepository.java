@@ -1,4 +1,4 @@
-package com.vini.dev.twapi.api.posts.repository;
+package com.vini.dev.twapi.api.posts.repositories;
 
 
 import com.vini.dev.twapi.api.posts.domain.Post;

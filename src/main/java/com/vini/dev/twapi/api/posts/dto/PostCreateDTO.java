@@ -1,5 +1,6 @@
 package com.vini.dev.twapi.api.posts.dto;
 
+import com.vini.dev.twapi.api.users.domain.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 

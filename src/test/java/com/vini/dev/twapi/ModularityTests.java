@@ -10,12 +10,12 @@ class ModularityTests {
 
     @Test
     void verifiesModularStructure() {
-        modules.verify();
+	    this.modules.verify();
     }
 
     @Test
     void createModuleDocumentation() {
-        new Documenter(modules).writeDocumentation().writeModulesAsPlantUml();
+        new Documenter(this.modules).writeDocumentation().writeModulesAsPlantUml();
     }
 
 }

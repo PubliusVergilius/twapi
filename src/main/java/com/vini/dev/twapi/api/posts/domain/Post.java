@@ -1,5 +1,6 @@
 package com.vini.dev.twapi.api.posts.domain;
 
+import com.vini.dev.twapi.api.users.domain.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -9,16 +10,18 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "posts")
 @Data
-@AllArgsConstructor()
+@AllArgsConstructor
 @NoArgsConstructor
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
+    @Column(name = "post_id")
     String id;
 
-    @Column(name = "user_id")
-    String userId;
+    // @Column(name = "author_id")
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    User author;
 
     @Lob
     @Column(name = "post_body", nullable = false, columnDefinition = "CLOB")

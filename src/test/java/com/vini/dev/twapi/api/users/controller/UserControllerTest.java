@@ -26,20 +26,20 @@ public class UserControllerTest {
 
     @Test
     void it_should_return_created_response () throws Exception {
-        User newUser = new User("vini");
-        String want = userMapper.writeValueAsString(newUser);
+        final User newUser = new User("vini");
+        final String want = this.userMapper.writeValueAsString(newUser);
 
-        MvcResult got = mock.perform(post(uri)
-                .content(userMapper.writeValueAsString(newUser))
+        final MvcResult got = this.mock.perform(post(this.uri)
+                .content(this.userMapper.writeValueAsString(newUser))
                 .with(new RequestProcessor().jsonDefaults()))
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        assertResponseContent(got, want);
+        this.assertResponseContent(got, want);
     }
 
-    void assertResponseContent (MvcResult got, String want) {
-        String responseContent = new String(got.getResponse().getContentAsByteArray(), StandardCharsets.UTF_8);
+    void assertResponseContent (final MvcResult got, final String want) {
+        final String responseContent = new String(got.getResponse().getContentAsByteArray(), StandardCharsets.UTF_8);
         assertEquals(want, responseContent);
     }
 }

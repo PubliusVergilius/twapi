@@ -2,7 +2,7 @@ package com.vini.dev.twapi.api.posts.controllers;
 
 import com.vini.dev.twapi.api.posts.dto.PostCreateDTO;
 import com.vini.dev.twapi.api.posts.dto.PostDTO;
-import com.vini.dev.twapi.api.posts.service.PostService;
+import com.vini.dev.twapi.api.posts.services.PostService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
 
@@ -27,9 +26,9 @@ public class PostController {
     @ResponseStatus(value = HttpStatus.I_AM_A_TEAPOT, reason = "erroooou!")
     static  class PostException extends RuntimeException {}
 
-    @GetMapping(value = "/{postId}")
-    ResponseEntity<PostDTO> getPostById  (@PathVariable String postId) {
-        Optional<PostDTO> post = postService.retrievePost(postId);
+    @GetMapping("/{postId}")
+    ResponseEntity<PostDTO> getPostById  (@PathVariable final String postId) {
+        final Optional<PostDTO> post = this.postService.retrievePost(postId);
 
         return post.map(postDTO -> ResponseEntity.status(HttpStatus.FOUND)
                 .contentType(MediaType.APPLICATION_JSON).body(postDTO))
@@ -37,20 +36,20 @@ public class PostController {
 
     }
 
-    @GetMapping(value = "/error")
+    @GetMapping("/error")
      ResponseEntity<String> error  () throws Exception {
 
         throw new PostException();
         /*
         return ResponseEntity.status(HttpStatus.FOUND)
                 .contentType(MediaType.APPLICATION_JSON).body(new PostDTO("", "", ""));
-         */
+        */
     }
 
     @PostMapping
-    ResponseEntity<PostDTO> createPost (@CookieValue(value = "userId", defaultValue = "") String userId,
-                                        @Valid @RequestBody PostCreateDTO request) {
-        PostDTO response = postService.registerPost(request);
+    ResponseEntity<PostDTO> createPost (@CookieValue(value = "userId", defaultValue = "") final String userId,
+                                        @Valid @RequestBody final PostCreateDTO request) throws Exception {
+        final PostDTO response = this.postService.registerPost(request);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON).body(response);
@@ -58,8 +57,8 @@ public class PostController {
 
     @ResponseStatus(value = HttpStatus.CONFLICT, reason = "Violação da integridade dos dados")
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public void conflict (HttpServletRequest request, Exception ex) {
-        log.error("Requisição: %s provocou %s".formatted(request.getRequestURL(), ex));
+    public void conflict (final HttpServletRequest request, final Exception ex) {
+        PostController.log.error("Requisição: %s provocou %s".formatted(request.getRequestURL(), ex));
     }
 
     /*

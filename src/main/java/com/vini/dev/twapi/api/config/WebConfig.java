@@ -14,13 +14,13 @@ import java.util.List;
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
-    public void configurePathMatch(PathMatchConfigurer configurer) {
+    public void configurePathMatch(final PathMatchConfigurer configurer) {
         // Faz iguais ambos `/path` e `/path/`
         configurer.setUseTrailingSlashMatch(true);
     }
 
     @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+    public void configureMessageConverters(final List<HttpMessageConverter<?>> converters) {
         converters.addFirst(new StringHttpMessageConverter(StandardCharsets.UTF_16));
     }
 }

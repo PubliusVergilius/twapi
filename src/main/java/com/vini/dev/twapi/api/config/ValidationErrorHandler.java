@@ -13,14 +13,14 @@ import java.util.Map;
 public class ValidationErrorHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidationErrors(MethodArgumentNotValidException ex) {
-        Map<String, String> fieldErrors = new HashMap<>();
+    public ResponseEntity<Map<String, Object>> handleValidationErrors(final MethodArgumentNotValidException ex) {
+        final Map<String, String> fieldErrors = new HashMap<>();
 
         ex.getBindingResult().getFieldErrors().forEach(error ->
                 fieldErrors.put(error.getField(), error.getDefaultMessage())
         );
 
-        Map<String, Object> responseBody = new HashMap<>();
+        final Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("message", "Validation failed");
         responseBody.put("errors", fieldErrors);
 

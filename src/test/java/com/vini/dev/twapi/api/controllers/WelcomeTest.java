@@ -19,7 +19,7 @@ public class WelcomeTest {
     @Test
     void Presentation_ShouldReturnWelcome() throws  Exception {
 
-        mock.perform(get("/api/v1"))
+	    this.mock.perform(get("/api/v1"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string("Olá!"));
     }

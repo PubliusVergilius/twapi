@@ -1,4 +1,4 @@
-package com.vini.dev.twapi.api.posts.repository;
+package com.vini.dev.twapi.api.posts.repositories;
 
 import com.vini.dev.twapi.api.posts.domain.Post;
 import org.springframework.context.annotation.Profile;
@@ -21,23 +21,23 @@ public class StubPostRepository implements PostRepository {
     private final Map<String, Post> store = new HashMap<>();
 
     @Override
-    public Optional<Post> findById(String id) {
-        return Optional.ofNullable(store.get(id));
+    public Optional<Post> findById(final String id) {
+        return Optional.ofNullable(this.store.get(id));
     }
 
     @Override
-    public boolean existsById(String s) {
+    public boolean existsById(final String s) {
         return false;
     }
 
     // Optional: For test initialization or clearing
     public void clear() {
-        store.clear();
+        this.store.clear();
     }
 
-    public void preload(Post... posts) {
-        for (Post post : posts) {
-            store.put(post.getId(), post);
+    public void preload(final Post... posts) {
+        for (final Post post : posts) {
+            this.store.put(post.getId(), post);
         }
     }
 
@@ -47,22 +47,22 @@ public class StubPostRepository implements PostRepository {
     }
 
     @Override
-    public <S extends Post> S saveAndFlush(S entity) {
+    public <S extends Post> S saveAndFlush(final S entity) {
         return null;
     }
 
     @Override
-    public <S extends Post> List<S> saveAllAndFlush(Iterable<S> entities) {
+    public <S extends Post> List<S> saveAllAndFlush(final Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public void deleteAllInBatch(Iterable<Post> entities) {
+    public void deleteAllInBatch(final Iterable<Post> entities) {
 
     }
 
     @Override
-    public void deleteAllByIdInBatch(Iterable<String> strings) {
+    public void deleteAllByIdInBatch(final Iterable<String> strings) {
 
     }
 
@@ -72,65 +72,65 @@ public class StubPostRepository implements PostRepository {
     }
 
     @Override
-    public Post getOne(String s) {
+    public Post getOne(final String s) {
         return null;
     }
 
     @Override
-    public Post getById(String s) {
+    public Post getById(final String s) {
         return null;
     }
 
     @Override
-    public Post getReferenceById(String s) {
+    public Post getReferenceById(final String s) {
         return null;
     }
 
     @Override
-    public <S extends Post> Optional<S> findOne(Example<S> example) {
+    public <S extends Post> Optional<S> findOne(final Example<S> example) {
         return Optional.empty();
     }
 
     @Override
-    public <S extends Post> List<S> findAll(Example<S> example) {
+    public <S extends Post> List<S> findAll(final Example<S> example) {
         return List.of();
     }
 
     @Override
-    public <S extends Post> List<S> findAll(Example<S> example, Sort sort) {
+    public <S extends Post> List<S> findAll(final Example<S> example, final Sort sort) {
         return List.of();
     }
 
     @Override
-    public <S extends Post> Page<S> findAll(Example<S> example, Pageable pageable) {
+    public <S extends Post> Page<S> findAll(final Example<S> example, final Pageable pageable) {
         return null;
     }
 
     @Override
-    public <S extends Post> long count(Example<S> example) {
+    public <S extends Post> long count(final Example<S> example) {
         return 0;
     }
 
     @Override
-    public <S extends Post> boolean exists(Example<S> example) {
+    public <S extends Post> boolean exists(final Example<S> example) {
         return false;
     }
 
     @Override
-    public <S extends Post, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends Post, R> R findBy(final Example<S> example, final Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
 
     @Override
-    public <S extends Post> S save(S entity) {
-        String size = String.valueOf(store.size());
+    public <S extends Post> S save(final S entity) {
+        final String size = String.valueOf(this.store.size());
         entity.setId(size);
-        store.put(size, entity);
+        this.store.put(size, entity);
         return entity;
     }
 
     @Override
-    public <S extends Post> List<S> saveAll(Iterable<S> entities) {
+    public <S extends Post> List<S> saveAll(final Iterable<S> entities) {
         return List.of();
     }
 
@@ -140,7 +140,7 @@ public class StubPostRepository implements PostRepository {
     }
 
     @Override
-    public List<Post> findAllById(Iterable<String> strings) {
+    public List<Post> findAllById(final Iterable<String> strings) {
         return List.of();
     }
 
@@ -150,22 +150,22 @@ public class StubPostRepository implements PostRepository {
     }
 
     @Override
-    public void deleteById(String s) {
+    public void deleteById(final String s) {
 
     }
 
     @Override
-    public void delete(Post entity) {
+    public void delete(final Post entity) {
 
     }
 
     @Override
-    public void deleteAllById(Iterable<? extends String> strings) {
+    public void deleteAllById(final Iterable<? extends String> strings) {
 
     }
 
     @Override
-    public void deleteAll(Iterable<? extends Post> entities) {
+    public void deleteAll(final Iterable<? extends Post> entities) {
 
     }
 
@@ -175,12 +175,12 @@ public class StubPostRepository implements PostRepository {
     }
 
     @Override
-    public List<Post> findAll(Sort sort) {
+    public List<Post> findAll(final Sort sort) {
         return List.of();
     }
 
     @Override
-    public Page<Post> findAll(Pageable pageable) {
+    public Page<Post> findAll(final Pageable pageable) {
         return null;
     }
 }

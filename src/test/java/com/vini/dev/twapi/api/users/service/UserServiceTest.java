@@ -24,7 +24,7 @@ public class UserServiceTest {
         User user;
         boolean shouldError;
 
-        public Template(String name, User user, boolean shouldError) {
+        public Template(final String name, final User user, final boolean shouldError) {
             this.name = name;
             this.user = user;
             this.shouldError = shouldError;
@@ -33,20 +33,20 @@ public class UserServiceTest {
 
     @Test
     void it_should_create_users () {
-        List<Template> table = new ArrayList<>();
+        final List<Template> table = new ArrayList<>();
         table.add(new Template("Should save first user", new User("user_1"), false));
         table.add(new Template("Should save second user", new User("user_2"), false));
         table.add(new Template("Should fail on saving duplicated username", new User("user_2"), true));
 
         table.forEach(test -> {
             try {
-                User want = new User(test.user.getUsername());
-                User got = userService.registerUser(want);
-                want.setUserId(got.getUserId());
+                final User want = new User(test.user.getUsername());
+                final User got = this.userService.registerUser(want);
+                want.setId(got.getId());
 
                 Assertions.assertNotNull(got, test.name);
                 Assertions.assertEquals(want, got, test.name);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 Assertions.assertInstanceOf(DataIntegrityViolationException.class, e, test.name);
             }
         });
