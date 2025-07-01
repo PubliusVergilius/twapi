@@ -20,5 +20,8 @@ jobs:
           # git remote add origin git@gitlab.com:vinteesetedemaiodedoismil/twapi.git
           git remote add gitlab https://vinteesetedemaiodedoismil:${{ secrets.GITLAB_TOKEN }}@gitlab.com/vinteesetedemaiodedoismil/twapi.git
           git push --mirror gitlab
-        # env:
-          # GIT_CREDENTIALS: ${{ secrets.GITLAB_TOKEN }}
+      - name: Check secret presence
+        run: |
+          echo "GitLab token set: ${GITLAB_TOKEN+x}"
+        env:
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
