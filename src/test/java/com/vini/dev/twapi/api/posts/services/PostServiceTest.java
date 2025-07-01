@@ -3,6 +3,7 @@ package com.vini.dev.twapi.api.posts.services;
 import com.vini.dev.twapi.api.posts.domain.Post;
 import com.vini.dev.twapi.api.posts.dto.PostCreateDTO;
 import com.vini.dev.twapi.api.posts.dto.PostDTO;
+import com.vini.dev.twapi.api.posts.exceptions.InexistentUserException;
 import com.vini.dev.twapi.api.users.domain.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -56,22 +57,18 @@ public class PostServiceTest {
 			String id = test.want.getId();
 			Post want = new Post(id, defaultUser, test.want.getBody());
 
-			try {
-				var got = this.postService.registerPost(new PostCreateDTO(want.getAuthor().getId(), want.getBody()));
-				Assertions.assertNotNull(got, "should never be null");
-				Assertions.assertEquals(want.getBody(), got.body(), "wrong response body on registering new post");
-				Assertions.assertEquals(want.getAuthor().getId(), got.userId(), "wrong user id on " +
-						"registering new post");
-			} catch (Exception e) {
-				Assertions.assertInstanceOf(e.getClass(),
-						ExceptionInInitializerError.class);
-			}
+			var got = this.postService.registerPost(new PostCreateDTO(want.getAuthor().getId(), want.getBody()));
+			Assertions.assertNotNull(got, "should never be null");
+			Assertions.assertEquals(want.getBody(), got.body(), "wrong response body on registering new post");
+			Assertions.assertEquals(want.getAuthor().getId(), got.userId(), "wrong user id on " +
+					"registering new post");
+
 		});
 	}
 
 	@Test
 	void should_throw_on_creating_post_with_inexisting_user () {
-		Assertions.assertThrows(DataIntegrityViolationException.class, () -> {
+		Assertions.assertThrows(InexistentUserException.class, () -> {
 			postService.registerPost(new PostCreateDTO("2", "teste falho"));
 		});
 	}

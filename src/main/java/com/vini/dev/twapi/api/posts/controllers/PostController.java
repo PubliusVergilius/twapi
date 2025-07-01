@@ -27,8 +27,8 @@ public class PostController {
     static  class PostException extends RuntimeException {}
 
     @GetMapping("/{postId}")
-    ResponseEntity<PostDTO> getPostById  (@PathVariable final String postId) {
-        final Optional<PostDTO> post = this.postService.retrievePost(postId);
+    ResponseEntity<PostDTO> getPostById  (@PathVariable String postId) {
+        Optional<PostDTO> post = this.postService.retrievePost(postId);
 
         return post.map(postDTO -> ResponseEntity.status(HttpStatus.FOUND)
                 .contentType(MediaType.APPLICATION_JSON).body(postDTO))
@@ -49,7 +49,10 @@ public class PostController {
     @PostMapping
     ResponseEntity<PostDTO> createPost (@CookieValue(value = "userId", defaultValue = "") final String userId,
                                         @Valid @RequestBody final PostCreateDTO request) throws Exception {
-        final PostDTO response = this.postService.registerPost(request);
+        PostDTO response = this.postService.registerPost(request);
+        if ( response == null) {
+           return ResponseEntity.internalServerError().build();
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON).body(response);

@@ -1,0 +1,23 @@
+image: gradle:8.5-jdk21
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  script: 
+    - ./gradlew clean build -x test
+  artifacts:
+    paths:
+      - build/libs/
+
+test:
+  stage: test
+  script:
+    - ./gradlew test
+  artifacts:
+    when: always
+    reports:
+      junit: build/test-results/test
+    paths:
+      - build/reports/tests/test
