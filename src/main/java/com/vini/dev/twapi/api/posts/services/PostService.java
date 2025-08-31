@@ -1,30 +1,28 @@
 package com.vini.dev.twapi.api.posts.services;
 
+import com.vini.dev.twapi.api.adaptars.JpaPostStore;
+import com.vini.dev.twapi.api.adaptars.JpaUserStore;
 import com.vini.dev.twapi.api.posts.domain.Post;
 import com.vini.dev.twapi.api.posts.dto.PostCreateDTO;
 import com.vini.dev.twapi.api.posts.dto.PostDTO;
 import com.vini.dev.twapi.api.posts.exceptions.InexistentUserException;
 import com.vini.dev.twapi.api.posts.mappers.PostMapper;
-import com.vini.dev.twapi.api.posts.repositories.PostRepository;
 import com.vini.dev.twapi.api.users.domain.User;
-import com.vini.dev.twapi.api.users.repository.UserRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
 // @AllArgsConstructor
 public class PostService {
 
-    private final PostRepository postRepository;
-    private final UserRepository userRepository;
+    private final JpaPostStore postStore;
+    private final JpaUserStore userStore;
 
-    public PostService(PostRepository postRepository, final UserRepository userRepository) {
-        this.postRepository = postRepository;
-        this.userRepository = userRepository;
+    public PostService(JpaPostStore postRepository, final JpaUserStore userRepository) {
+        this.postStore = postRepository;
+        this.userStore = userRepository;
     }
 
     @Transactional
@@ -33,7 +31,7 @@ public class PostService {
 
         String authorId = post.authorId();
 
-        final Optional<User> optUser = this.userRepository.findById(authorId);
+        final Optional<User> optUser = this.userStore.findById(authorId);
         if (optUser.isEmpty()){
             throw new InexistentUserException(authorId);
         }
@@ -42,7 +40,7 @@ public class PostService {
         System.out.println("*********** New Post **************");
 
         postEntity.setAuthor(user);
-        Post saved = this.postRepository.save(postEntity);
+        Post saved = this.postStore.save(postEntity);
 
         System.out.println(saved);
         return Optional.of(saved);
@@ -51,7 +49,7 @@ public class PostService {
 
     @Transactional
     public Optional<PostDTO> retrievePost (String postId) {
-        Optional<Post> postOpt = this.postRepository.findById(postId);
+        Optional<Post> postOpt = this.postStore.findById(postId);
         if (postOpt.isPresent()) {
             var post = postOpt.get();
             return Optional.of(new PostDTO(post.getId(), post.getAuthor().getId(), post.getBody()));

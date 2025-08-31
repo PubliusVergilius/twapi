@@ -1,5 +1,6 @@
 package com.vini.dev.twapi.api.users.service;
 
+import com.vini.dev.twapi.api.domain.UserStore;
 import com.vini.dev.twapi.api.users.domain.User;
 import com.vini.dev.twapi.api.users.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -10,10 +11,10 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
+    private final UserStore userStore;
 
     @Transactional
     public User registerUser (final User user) throws Exception {
-        return this.userRepository.save(user);
+        return this.userStore.save(user);
     }
 }
