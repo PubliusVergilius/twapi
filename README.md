@@ -24,6 +24,7 @@ Kubernetes, Docker
 - make user create and retrieve his own posts
 ### Add Modulith package
 ### Add Spring Gateway
+### Add admin dashboard
 - Create another project
 - Configure a multi spring web context
 - Configure the auth. service api local to the gateway

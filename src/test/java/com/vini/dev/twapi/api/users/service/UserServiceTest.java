@@ -1,12 +1,14 @@
 package com.vini.dev.twapi.api.users.service;
 
 import com.vini.dev.twapi.api.users.domain.User;
+import jakarta.transaction.Transactional;
 import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,8 @@ import java.util.List;
 
 
 @SpringBootTest
+@ActiveProfiles("test")
+@Transactional
 public class UserServiceTest {
 
     @Autowired

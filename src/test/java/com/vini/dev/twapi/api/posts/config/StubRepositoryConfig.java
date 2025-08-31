@@ -10,16 +10,18 @@ import org.springframework.context.annotation.Primary;
 @TestConfiguration
 public class StubRepositoryConfig {
     // @Bean(name = "userRepository")
+    /*
     @Bean
     @Primary
     public StubPostRepository stubPostRepository () {
         final StubPostRepository stub = new StubPostRepository();
         final User user = new User("developer");
-        user.setId("1");
+        user.setId("111");
         stub.preload(
-            new Post("1", user, "teste 1"),
-            new Post("1", user, "teste 2")
+            new Post("111", "teste 1", user),
+            new Post("111", "teste 2" ,user)
         );
         return stub;
     }
+    */
 }

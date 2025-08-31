@@ -7,7 +7,9 @@ import com.vini.dev.twapi.api.posts.dto.PostCreateDTO;
 import com.vini.dev.twapi.api.posts.dto.PostDTO;
 import com.vini.dev.twapi.api.posts.services.PostService;
 import com.vini.dev.twapi.api.users.domain.User;
+import jakarta.persistence.Transient;
 import jakarta.servlet.http.Cookie;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
@@ -50,10 +53,11 @@ public class PostControllerTest {
     private PostService postService;
 
     @BeforeEach
+    @BeforeTransaction
     void setUp () {
         this.posts = List.of(
-                new Post("101", new User("developer"), "teste 1"),
-                new Post("102", new User("developer"), "teste 2")
+                new Post("101", "teste 1", new User("developer")),
+                new Post("102","teste 2",  new User("developer"))
         );
     }
 
@@ -118,9 +122,17 @@ public class PostControllerTest {
 
         for (final Template test : table_cases) {
 
+            // Mock data
+            var testUser = new User();
+            var testUsername = "testUser-"+test.input.authorId();
+            testUser.setUsername(testUsername);
+            testUser.setId(test.input.authorId());
+
+            var optResult = Optional.of(new Post("teste", test.input.body(), testUser));
+
             // Mock http response
             when(this.postService.registerPost(test.input))
-                    .thenReturn(new PostDTO("teste", test.input.authorId(), test.input.body()));
+                    .thenReturn(optResult);
 
             // Test request
             final String json = this.postMapper.writeValueAsString(test.input);

@@ -10,7 +10,7 @@ public class PostMapper {
     public static Post toEntity (final PostCreateDTO dto) {
         final User user = new User();
         user.setId(dto.authorId());
-        return new Post(null, user, dto.body());
+        return new Post(null, dto.body(), null);
     }
 
     public static PostResponseDTO toResponse (final Post post) {

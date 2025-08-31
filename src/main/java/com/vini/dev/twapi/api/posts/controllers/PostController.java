@@ -1,5 +1,6 @@
 package com.vini.dev.twapi.api.posts.controllers;
 
+import com.vini.dev.twapi.api.posts.domain.Post;
 import com.vini.dev.twapi.api.posts.dto.PostCreateDTO;
 import com.vini.dev.twapi.api.posts.dto.PostDTO;
 import com.vini.dev.twapi.api.posts.services.PostService;
@@ -49,11 +50,13 @@ public class PostController {
     @PostMapping
     ResponseEntity<PostDTO> createPost (@CookieValue(value = "userId", defaultValue = "") final String userId,
                                         @Valid @RequestBody final PostCreateDTO request) throws Exception {
-        PostDTO response = this.postService.registerPost(request);
-        if ( response == null) {
+        Optional<Post> optionalPost = this.postService.registerPost(request);
+        if (optionalPost.isEmpty()) {
            return ResponseEntity.internalServerError().build();
         }
 
+        final var post = optionalPost.get();
+        final var response = new PostDTO(post.getId(), post.getAuthor().getId(), post.getBody());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON).body(response);
     }

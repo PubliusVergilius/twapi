@@ -9,8 +9,10 @@ import com.vini.dev.twapi.api.posts.repositories.PostRepository;
 import com.vini.dev.twapi.api.users.domain.User;
 import com.vini.dev.twapi.api.users.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -24,19 +26,26 @@ public class PostService {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
     }
+
     @Transactional
-    public PostDTO registerPost ( PostCreateDTO post) {
+    public Optional<Post> registerPost ( PostCreateDTO post ) {
         Post postEntity = PostMapper.toEntity(post);
 
-        try {
-            User user = this.userRepository.getReferenceById(post.authorId());
-            postEntity.setAuthor(user);
-        } catch (RuntimeException e) {
-            throw new InexistentUserException(post.authorId());
-            // throw e;
+        String authorId = post.authorId();
+
+        final Optional<User> optUser = this.userRepository.findById(authorId);
+        if (optUser.isEmpty()){
+            throw new InexistentUserException(authorId);
         }
+        var user = optUser.get();
+
+        System.out.println("*********** New Post **************");
+
+        postEntity.setAuthor(user);
         Post saved = this.postRepository.save(postEntity);
-        return new PostDTO(saved.getId(), saved.getAuthor().getId(), saved.getBody());
+
+        System.out.println(saved);
+        return Optional.of(saved);
 
     }
 
