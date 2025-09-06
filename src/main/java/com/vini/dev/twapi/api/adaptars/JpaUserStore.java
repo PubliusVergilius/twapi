@@ -5,6 +5,7 @@ import com.vini.dev.twapi.api.users.domain.User;
 import com.vini.dev.twapi.api.users.repository.UserRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -14,6 +15,11 @@ public class JpaUserStore implements UserStore {
 
 	public JpaUserStore (UserRepository repository) {
 		this.repository = repository;
+	}
+
+	@Override
+	public List<User> findAll () {
+		return repository.findAll();
 	}
 
 	@Override

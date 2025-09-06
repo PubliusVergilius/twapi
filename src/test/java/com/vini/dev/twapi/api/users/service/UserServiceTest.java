@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -45,8 +46,24 @@ public class UserServiceTest {
         }
     }
 
+	@Test
+	void should_get_all_users() {
+		User user1 = new User("user1");
+		user1.setId("1");
+		User user2 = new User("user2");
+		user2.setId("2");
+		final List<User> want = List.of(user1, user2);
+
+		Mockito.when(userStore.findAll()).thenReturn(want);
+
+		var got = userService.retrieveAllUsers();
+
+		Assertions.assertTrue(got.size() == 2, "Should contain 2 users");
+		Assertions.assertEquals(want, got, "Want does not match with got");
+	}
+
     @Test
-    void it_should_create_users () {
+    void should_create_users () {
         final List<Template> table = new ArrayList<>();
 	    AtomicInteger index = new AtomicInteger(1);
 
@@ -56,16 +73,16 @@ public class UserServiceTest {
 
         table.forEach(test -> {
             try {
-	            final User want = new User(test.user.getUsername());
+	            final User testUser = new User(test.user.getUsername());
 
-				final User testResult = new User(test.user.getUsername());
+				final User want = new User(test.user.getUsername());
 				int _index = index.getAndIncrement();
 				String testId = String.valueOf(_index);
-				testResult.setId(testId);
+				want.setId(testId);
 
-				Mockito.when(userStore.save(want)).thenReturn(testResult);
+				Mockito.when(userStore.save(testUser)).thenReturn(want);
 
-				User got = userService.registerUser(want);
+				User got = userService.registerUser(testUser);
 
                 Assertions.assertNotNull(got, test.name);
                 Assertions.assertEquals(want.getUsername(), got.getUsername(), test.name);
